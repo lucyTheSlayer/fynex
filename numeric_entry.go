@@ -10,16 +10,19 @@ import (
 
 type NumericalEntry struct {
 	widget.Entry
+	extraWidth float32
 }
 
-func NewNumericalEntry() *NumericalEntry {
-	entry := &NumericalEntry{}
+func NewNumericalEntry(extraWidth float32) *NumericalEntry {
+	entry := &NumericalEntry{
+		extraWidth: extraWidth,
+	}
 	entry.ExtendBaseWidget(entry)
 	return entry
 }
 
-func NewNumericalEntryWithData(data binding.String) *NumericalEntry {
-	entry := NewNumericalEntry()
+func NewNumericalEntryWithData(extraWidth float32, data binding.String) *NumericalEntry {
+	entry := NewNumericalEntry(extraWidth)
 	entry.Bind(data)
 	return entry
 }
@@ -45,4 +48,8 @@ func (e *NumericalEntry) TypedShortcut(shortcut fyne.Shortcut) {
 
 func (e *NumericalEntry) Keyboard() mobile.KeyboardType {
 	return mobile.NumberKeyboard
+}
+
+func (e *NumericalEntry) MinSize() fyne.Size {
+	return fyne.NewSize(e.Entry.MinSize().Width+e.extraWidth, e.Entry.MinSize().Height)
 }
